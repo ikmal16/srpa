@@ -149,9 +149,15 @@ function getInitials(name?: string): string {
 
 /** Same labelling as before: "expiring_soon" -> "Expiring Soon", otherwise capitalised. */
 function statusLabel(status: string): string {
-  return status === "expiring_soon"
-    ? "Expiring Soon"
-    : status.charAt(0).toUpperCase() + status.slice(1);
+  if (status === "expired") {
+    return "Tamat";
+  }
+
+  if (status === "expiring_soon") {
+    return "Akan Tamat";
+  }
+
+  return "Sah";
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -241,7 +247,7 @@ function BackLink() {
       className={`inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 -ml-1.5 text-sm font-medium text-blue-900 transition-colors duration-150 hover:bg-blue-50 motion-reduce:transition-none ${focusRing}`}
     >
       <ArrowLeftIcon />
-      Back to Students
+      Kembali ke Senarai Pelajar
     </Link>
   );
 }
@@ -502,7 +508,7 @@ export default function StudentDetails() {
                 className="mt-5 flex gap-2.5 rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-3 text-sm font-medium text-amber-800"
               >
                 <ClockIcon className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>Passport expires within 30 days.</span>
+                <span>Passport akan taman dalam 30 hari.</span>
               </div>
             )}
 
@@ -512,7 +518,7 @@ export default function StudentDetails() {
                 className="mt-5 flex gap-2.5 rounded-lg border border-red-200 bg-red-50 px-3.5 py-3 text-sm font-medium text-red-700"
               >
                 <AlertTriangleIcon className="mt-0.5 h-4 w-4 shrink-0" />
-                <span>Passport has expired.</span>
+                <span>Passport telah tamat tempoh.</span>
               </div>
             )}
           </Section>

@@ -70,9 +70,7 @@ export default function CreateStudent() {
 
       navigate("/students");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to create student.",
-      );
+      setError(err instanceof Error ? err.message : "Gagal menambah pelajar.");
     } finally {
       setLoading(false);
     }
@@ -91,8 +89,8 @@ export default function CreateStudent() {
   return (
     <FormPageShell>
       <FormPageHeader
-        title="Add Student"
-        description="Add a new international student record."
+        title="Tambah Pelajar"
+        description="Tambah Rekod Pelajar Antarabangsa."
       />
 
       <StudentFormCard
@@ -104,19 +102,19 @@ export default function CreateStudent() {
           <FormActions
             loading={loading}
             disabled={loadingCountries}
-            submitLabel="Create Student"
-            loadingLabel="Creating..."
+            submitLabel="Tambah Pelajar"
+            loadingLabel="Menambah..."
           />
         }
       >
         <FormSection
-          title="Personal Information"
-          description="Name as it appears on official documents."
+          title="Maklumat Peribadi"
+          description="Nama yang sah seperti yang tertera pada pasport."
           icon={<UserIcon />}
         >
           <Field
             field="name"
-            label="Full Name"
+            label="Nama Lengkap"
             showError={isInvalid("name")}
             wide
           >
@@ -130,10 +128,10 @@ export default function CreateStudent() {
           </Field>
         </FormSection>
 
-        <FormSection title="Academic Information" icon={<AcademicIcon />}>
+        <FormSection title="Maklumat Akademik" icon={<AcademicIcon />}>
           <Field
             field="matric_no"
-            label="Matric No."
+            label="No. Matrik"
             showError={isInvalid("matric_no")}
           >
             <input
@@ -161,16 +159,16 @@ export default function CreateStudent() {
         </FormSection>
 
         <FormSection
-          title="Country and Passport"
-          description="Nationality and passport validity."
+          title="Negara dan Tarikh Luput Pasport"
+          description="Maklumat Kenegaraan dan tarikh luput pasport pelajar."
           icon={<GlobeIcon />}
         >
           <Field
             field="country_code"
-            label="Country"
+            label="Negara"
             hint={
               selectedCountry
-                ? `Country code: ${selectedCountry.country_code}`
+                ? `Kod negara: ${selectedCountry.country_code}`
                 : undefined
             }
             showError={isInvalid("country_code")}
@@ -186,8 +184,8 @@ export default function CreateStudent() {
 
           <Field
             field="passport_expiry"
-            label="Passport Expiry"
-            hint="Expiry date as shown on the passport."
+            label="Tarikh Luput Pasport"
+            hint="Tarikh luput seperti yang tertera pada pasport."
             showError={isInvalid("passport_expiry")}
           >
             <input

@@ -191,7 +191,7 @@ export default function ImportStudents({ onImported }: ImportStudentsProps) {
         ref={inputRef}
         type="file"
         accept=".xlsx,.xls,.csv"
-        aria-label="Choose a student import file (.xlsx, .xls or .csv)"
+        aria-label="Pilih fail pelajar untuk diimport (.xlsx, .xls or .csv)"
         onChange={(event) => {
           setFile(event.target.files?.[0] ?? null);
           setMessage("");
@@ -231,7 +231,7 @@ export default function ImportStudents({ onImported }: ImportStudentsProps) {
           }`}
         >
           <UploadIcon className="h-4 w-4 shrink-0" />
-          <span>Import File</span>
+          <span>Import Fail</span>
         </button>
       ) : (
         /* Selected file chip + Import + Remove */

@@ -430,24 +430,24 @@ export default function Dashboard() {
                       to="/students"
                       primary
                       icon={<ListIcon />}
-                      title="View Students"
-                      description="Browse and search student records"
+                      title="Lihat Pelajar"
+                      description="Semak dan cari rekod pelajar"
                     />
 
                     {isPegawai && (
                       <ActionLink
                         to="/students/create"
                         icon={<UserPlusIcon />}
-                        title="Add Student"
-                        description="Register a new international student"
+                        title="Tambah Pelajar"
+                        description="Daftar pelajar antarabangsa baru"
                       />
                     )}
 
                     <ActionLink
                       to="/reports"
                       icon={<ReportIcon />}
-                      title="View Reports"
-                      description="Review summaries and reports"
+                      title="Lihat Laporan"
+                      description="Semak ringkasan dan laporan"
                     />
                   </div>
                 </section>

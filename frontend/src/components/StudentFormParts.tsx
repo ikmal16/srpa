@@ -161,11 +161,11 @@ export type FieldName =
   | "passport_expiry";
 
 const ERROR_TEXT: Record<FieldName, string> = {
-  name: "Enter the student's full name.",
-  matric_no: "Enter the matric number.",
-  program: "Enter the program of study.",
-  country_code: "Select a country.",
-  passport_expiry: "Select the passport expiry date.",
+  name: "Masukkan nama penuh.",
+  matric_no: "Masukkan nombor matrik.",
+  program: "Masukkan program pengajian.",
+  country_code: "Pilih negara.",
+  passport_expiry: "Pilih tarikh luput pasport.",
 };
 
 export interface ControlProps {
@@ -253,15 +253,15 @@ export function FormPageHeader({
           className={`-ml-1.5 inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-sm font-medium text-blue-900 transition-colors duration-150 hover:bg-blue-50 motion-reduce:transition-none ${focusRing}`}
         >
           <ArrowLeftIcon />
-          Back to Students
+          Kembali ke Senarai Pelajar
         </Link>
 
         <h1 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900 sm:text-[26px]">
           {title}
         </h1>
         <p className="mt-1 text-sm text-slate-600">
-          {description} Fields marked with{" "}
-          <span className="font-semibold text-red-600">*</span> are required.
+          {description} Ruang yang ditandakan dengan{" "}
+          <span className="font-semibold text-red-600">*</span> adalah wajib.
         </p>
       </header>
     </Reveal>
@@ -421,7 +421,7 @@ export function CountrySelect({
         className={`${controlProps.className} appearance-none pr-9`}
       >
         <option value="">
-          {loading ? "Loading countries..." : "Select a country"}
+          {loading ? "Loading countries..." : "Pilih negara"}
         </option>
 
         {countries.map((country) => (
@@ -458,7 +458,7 @@ export function FormActions({
         disabled={loading}
         className={`inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-colors duration-150 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none ${focusRing}`}
       >
-        Cancel
+        Batal
       </button>
 
       <button

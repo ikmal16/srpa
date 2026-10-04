@@ -37,7 +37,7 @@ export default function ExportStudents() {
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = "students.xlsx";
+      link.download = "pelajar_antarabangsa.xlsx";
 
       document.body.appendChild(link);
       link.click();

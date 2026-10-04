@@ -71,7 +71,7 @@ export async function exportStudentDistributionReport() {
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = "student_distribution_report.xlsx";
+  link.download = "laporan_taburan_pelajar.xlsx";
 
   document.body.appendChild(link);
   link.click();

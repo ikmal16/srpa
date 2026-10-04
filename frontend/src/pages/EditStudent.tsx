@@ -140,8 +140,8 @@ export default function EditStudent() {
   return (
     <FormPageShell>
       <FormPageHeader
-        title="Edit Student"
-        description="Update the international student record."
+        title="Ubah Rekod Pelajar"
+        description="Ubah maklumat pelajar antarabangsa yang sedia ada."
       />
 
       <StudentFormCard
@@ -160,7 +160,7 @@ export default function EditStudent() {
               </span>
               <div className="min-w-0">
                 <p className="text-xs font-medium text-slate-500">
-                  Editing existing record
+                  Mengedit rekod yang sedia ada
                 </p>
                 <p className="truncate text-sm font-semibold text-slate-900">
                   {record.name}
@@ -176,14 +176,14 @@ export default function EditStudent() {
           <FormActions
             loading={loading}
             disabled={loadingCountries}
-            submitLabel="Update Student"
-            loadingLabel="Updating..."
+            submitLabel="Kemaskini Pelajar"
+            loadingLabel="Mengemaskini..."
           />
         }
       >
         <FormSection
-          title="Personal Information"
-          description="Name as it appears on official documents."
+          title="Maklumat Peribadi"
+          description="Nama seperti yang muncul dalam dokumen rasmi."
           icon={<UserIcon />}
         >
           <Field
@@ -202,10 +202,10 @@ export default function EditStudent() {
           </Field>
         </FormSection>
 
-        <FormSection title="Academic Information" icon={<AcademicIcon />}>
+        <FormSection title="Maklumat Akademik" icon={<AcademicIcon />}>
           <Field
             field="matric_no"
-            label="Matric No."
+            label="No. Matrik"
             showError={isInvalid("matric_no")}
           >
             <input
@@ -233,16 +233,16 @@ export default function EditStudent() {
         </FormSection>
 
         <FormSection
-          title="Country and Passport"
-          description="Nationality and passport validity."
+          title="Negara dan Pasport"
+          description="Kebangsaan dan sahnya pasport."
           icon={<GlobeIcon />}
         >
           <Field
             field="country_code"
-            label="Country"
+            label="Negara"
             hint={
               selectedCountry
-                ? `Country code: ${selectedCountry.country_code}`
+                ? `Kod negara: ${selectedCountry.country_code}`
                 : undefined
             }
             showError={isInvalid("country_code")}
@@ -258,8 +258,8 @@ export default function EditStudent() {
 
           <Field
             field="passport_expiry"
-            label="Passport Expiry"
-            hint="Expiry date as shown on the passport."
+            label="Tarikh Tamat Pasport"
+            hint="Tarikh tamat seperti yang ditunjukkan dalam pasport."
             showError={isInvalid("passport_expiry")}
           >
             <input

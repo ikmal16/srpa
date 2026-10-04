@@ -20,17 +20,43 @@ class StudentController extends Controller
     {
         $this->countryService = $countryService;
     }
-    public function index()
+   public function index()
     {
         $search = request('search');
 
         return Student::query()
             ->when($search, function ($query) use ($search) {
+                $search = trim($search);
+
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('matric_no', 'like', "%{$search}%")
                         ->orWhere('program', 'like', "%{$search}%")
                         ->orWhere('country_name', 'like', "%{$search}%");
+
+                    if (strcasecmp($search, 'Tamat') === 0) {
+                        $q->orWhereDate('passport_expiry', '<', now());
+                    }
+
+                    if (strcasecmp($search, 'Akan Tamat') === 0) {
+                        $q->orWhere(function ($statusQuery) {
+                            $statusQuery
+                                ->whereDate('passport_expiry', '>', now())
+                                ->whereDate(
+                                    'passport_expiry',
+                                    '<=',
+                                    now()->addDays(30)
+                                );
+                        });
+                    }
+
+                    if (strcasecmp($search, 'Sah') === 0) {
+                        $q->orWhereDate(
+                            'passport_expiry',
+                            '>',
+                            now()->addDays(30)
+                        );
+                    }
                 });
             })
             ->orderBy('id', 'desc')

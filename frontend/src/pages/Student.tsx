@@ -141,9 +141,15 @@ function Reveal({
 
 /** Same labelling as before: "expiring_soon" -> "Expiring Soon", otherwise capitalised. */
 function statusLabel(status: string): string {
-  return status === "expiring_soon"
-    ? "Expiring Soon"
-    : status.charAt(0).toUpperCase() + status.slice(1);
+  if (status === "expired") {
+    return "Tamat";
+  }
+
+  if (status === "expiring_soon") {
+    return "Akan Tamat";
+  }
+
+  return "Sah";
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -402,7 +408,7 @@ export default function Students() {
                 className={`inline-flex items-center justify-center gap-2 rounded-lg bg-blue-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors duration-150 hover:bg-blue-800 active:bg-blue-950 motion-reduce:transition-none ${focusRing}`}
               >
                 <PlusIcon />
-                Add Student
+                Tambah Pelajar
               </Link>
             )}
           </header>
