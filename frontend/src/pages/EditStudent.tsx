@@ -5,6 +5,28 @@ import { getCountries } from "../services/countryService";
 import type { Country } from "../services/countryService";
 import { apiFetch } from "../services/api";
 import type { Student } from "../services/studentService";
+import {
+  AcademicIcon,
+  CountrySelect,
+  Field,
+  FormActions,
+  FormPageHeader,
+  FormPageShell,
+  FormSection,
+  FormSkeleton,
+  GlobeIcon,
+  StudentFormCard,
+  UserIcon,
+  useStudentFormValidation,
+} from "../components/StudentFormParts";
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  const first = parts[0][0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+}
 
 export default function EditStudent() {
   const navigate = useNavigate();
@@ -22,6 +44,13 @@ export default function EditStudent() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Display only: the record as it was loaded, so the "editing" strip does not
+  // change while the user types.
+  const [record, setRecord] = useState<{
+    name: string;
+    matricNo: string;
+  } | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -41,6 +70,7 @@ export default function EditStudent() {
         setProgram(student.program);
         setCountryCode(student.country_code);
         setPassportExpiry(student.passport_expiry.slice(0, 10));
+        setRecord({ name: student.name, matricNo: student.matric_no });
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to load student.",
@@ -89,140 +119,158 @@ export default function EditStudent() {
     }
   }
 
+  const { isInvalid, controlProps, handleInvalid } = useStudentFormValidation({
+    name,
+    matric_no: matricNo,
+    program,
+    country_code: countryCode,
+    passport_expiry: passportExpiry,
+  });
+
+  const selectedCountry = countries.find((c) => c.country_code === countryCode);
+
   if (loadingStudent) {
     return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="mx-auto max-w-2xl rounded-xl bg-white p-6 text-center shadow">
-          Loading student...
-        </div>
-      </div>
+      <FormPageShell>
+        <FormSkeleton />
+      </FormPageShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Edit Student</h1>
+    <FormPageShell>
+      <FormPageHeader
+        title="Edit Student"
+        description="Update the international student record."
+      />
 
-          <p className="mt-1 text-gray-500">
-            Update the international student record.
-          </p>
-        </div>
-
-        <div className="rounded-xl bg-white p-6 shadow">
-          {error && (
-            <div className="mb-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-
-              <input
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Matric No.
-              </label>
-
-              <input
-                type="text"
-                value={matricNo}
-                onChange={(event) => setMatricNo(event.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Program
-              </label>
-
-              <input
-                type="text"
-                value={program}
-                onChange={(event) => setProgram(event.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Country
-              </label>
-
-              <select
-                value={countryCode}
-                onChange={(event) => setCountryCode(event.target.value)}
-                required
-                disabled={loadingCountries}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+      <StudentFormCard
+        error={error}
+        loading={loading}
+        onSubmit={handleSubmit}
+        onInvalid={handleInvalid}
+        context={
+          record && (
+            <div className="flex items-center gap-3 border-b border-slate-200 bg-blue-50/60 px-5 py-3.5 sm:px-6">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-blue-900 text-xs font-semibold text-white"
+                aria-hidden="true"
               >
-                <option value="">
-                  {loadingCountries
-                    ? "Loading countries..."
-                    : "Select a country"}
-                </option>
-
-                {countries.map((country) => (
-                  <option
-                    key={country.country_code}
-                    value={country.country_code}
-                  >
-                    {country.country_name}
-                  </option>
-                ))}
-              </select>
+                {getInitials(record.name)}
+              </span>
+              <div className="min-w-0">
+                <p className="text-xs font-medium text-slate-500">
+                  Editing existing record
+                </p>
+                <p className="truncate text-sm font-semibold text-slate-900">
+                  {record.name}
+                </p>
+                <p className="truncate text-xs text-slate-500">
+                  {record.matricNo}
+                </p>
+              </div>
             </div>
+          )
+        }
+        actions={
+          <FormActions
+            loading={loading}
+            disabled={loadingCountries}
+            submitLabel="Update Student"
+            loadingLabel="Updating..."
+          />
+        }
+      >
+        <FormSection
+          title="Personal Information"
+          description="Name as it appears on official documents."
+          icon={<UserIcon />}
+        >
+          <Field
+            field="name"
+            label="Full Name"
+            showError={isInvalid("name")}
+            wide
+          >
+            <input
+              type="text"
+              autoComplete="off"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              {...controlProps("name")}
+            />
+          </Field>
+        </FormSection>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Passport Expiry
-              </label>
+        <FormSection title="Academic Information" icon={<AcademicIcon />}>
+          <Field
+            field="matric_no"
+            label="Matric No."
+            showError={isInvalid("matric_no")}
+          >
+            <input
+              type="text"
+              autoComplete="off"
+              value={matricNo}
+              onChange={(event) => setMatricNo(event.target.value)}
+              {...controlProps("matric_no")}
+            />
+          </Field>
 
-              <input
-                type="date"
-                value={passportExpiry}
-                onChange={(event) => setPassportExpiry(event.target.value)}
-                required
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
-              />
-            </div>
+          <Field
+            field="program"
+            label="Program"
+            showError={isInvalid("program")}
+          >
+            <input
+              type="text"
+              autoComplete="off"
+              value={program}
+              onChange={(event) => setProgram(event.target.value)}
+              {...controlProps("program")}
+            />
+          </Field>
+        </FormSection>
 
-            <div className="flex gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => navigate("/students")}
-                className="rounded-lg border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
+        <FormSection
+          title="Country and Passport"
+          description="Nationality and passport validity."
+          icon={<GlobeIcon />}
+        >
+          <Field
+            field="country_code"
+            label="Country"
+            hint={
+              selectedCountry
+                ? `Country code: ${selectedCountry.country_code}`
+                : undefined
+            }
+            showError={isInvalid("country_code")}
+          >
+            <CountrySelect
+              countries={countries}
+              value={countryCode}
+              onChange={setCountryCode}
+              loading={loadingCountries}
+              controlProps={controlProps("country_code")}
+            />
+          </Field>
 
-              <button
-                type="submit"
-                disabled={loading || loadingCountries}
-                className="flex-1 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? "Updating..." : "Update Student"}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          <Field
+            field="passport_expiry"
+            label="Passport Expiry"
+            hint="Expiry date as shown on the passport."
+            showError={isInvalid("passport_expiry")}
+          >
+            <input
+              type="date"
+              value={passportExpiry}
+              onChange={(event) => setPassportExpiry(event.target.value)}
+              {...controlProps("passport_expiry")}
+            />
+          </Field>
+        </FormSection>
+      </StudentFormCard>
+    </FormPageShell>
   );
 }
